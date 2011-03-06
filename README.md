@@ -9,6 +9,14 @@ Graphpish features several:
 Getting Started
 ---------------
 
-To use the classes in your php scripts, include the .phar file, which registers an autoloader. 
+	make phar
 
-To render some neat graphs execute the shell scripts in the demo folder
+This will craten a .phar archive of all the needed php files. To use the classes in your php scripts, include the .phar file, which registers an autoloader. 
+
+	make demos
+
+This will create some graph .pngs in `demos/out/` and execute something like this:
+
+	php graphpish.phar demos/data/simple.xt | dot -Tpng > /demos/out/simple.xt_dot.png
+
+This will render a simple XDebug trace file. 
