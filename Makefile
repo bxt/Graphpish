@@ -3,7 +3,7 @@ BUILD_VERSION=1.0
 BUILD_FILELIST=demos README.md
 PHP_PATH=/usr/bin
 
-all: docs dist
+all: docs dist demos
 
 clean:
 	@echo
@@ -11,7 +11,7 @@ clean:
 	@echo
 	rm -Rvf target
 	rm -vf ${BUILD_NAME}.phar
-	mkdir -vp target/{dist,docs}
+	mkdir -vp target/{dist,docs/{phpuml,phpdoc}}
 
 phar: clean
 	@echo
@@ -39,6 +39,8 @@ docs: clean
 	@echo
 	@echo "Gathering docs..."
 	@echo
+	phpuml -f html -o target/docs/phpuml --no-deployment-view -n "${BUILD_NAME}-${BUILD_VERSION}" php
+	#phpdoc --defaultpackagename "${BUILD_NAME}" --defaultcategoryname "${BUILD_NAME}-${BUILD_VERSION}" -ric README.md -d php -t target/docs/phpdoc
 
 cleandemos:
 	@echo
