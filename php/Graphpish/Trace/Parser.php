@@ -3,7 +3,6 @@ namespace Graphpish\Trace;
 use Graphpish\Graph\Edge;
 
 class Parser {
-	const SIZEMULT=100;
 	protected $file;
 	private $_preNodes=array();
 	function __construct($file) {
