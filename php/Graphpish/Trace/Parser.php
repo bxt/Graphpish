@@ -2,27 +2,11 @@
 namespace Graphpish\Trace;
 use Graphpish\Graph\Edge;
 
-class Parser {
-	protected $file;
+class Parser extends \Graphpish\Util\FilelinesParser {
 	private $_preNodes=array();
-	function __construct($file) {
-		$this->file=$file;
-	}
-	function parse() {
+	function parse($file) {
 		$this->createRootnode();
-		$handle = @fopen($this->file, "r");
-		if ($handle) {
-			while (($buffer=fgets($handle, 4096))!==false) {
-				$this->parseLine($buffer);
-			}
-			if (!feof($handle)) {
-				throw new \Exception("Unexpected fgets() fail");
-			}
-			fclose($handle);
-		} else {
-			throw new \Exception("Can't open file for reading: {$this->file}");
-		}
-		return $this;
+		return parent::parse($file);
 	}
 	//private $_preLvl=0;
 	function parseLine($l) {

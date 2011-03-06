@@ -39,8 +39,8 @@ function init(){
 
 function cli($argv){
 	if(count($argv)==2) {
-		$p=new Trace\Parser($argv[1]);
-		$result=$p->parse()->getArrays();
+		$p=new Trace\Parser();
+		$result=$p->parse($argv[1])->getArrays();
 		
 		//var_dump($result);
 		
