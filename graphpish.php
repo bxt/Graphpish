@@ -39,13 +39,20 @@ function init(){
 
 function cli($argv){
 	if(count($argv)==2) {
-		$p=new Trace\Parser();
-		$result=$p->parse($argv[1])->getArrays();
+		if(strrchr($argv[1],'.')==".xt") {
+			$p=new Trace\Parser();
+			$result=$p->parse($argv[1])->getArrays();
+		} elseif (strrchr($argv[1],'.')==".gsql") {
+			$p=new Sql\Client();
+			$result=$p->addSource($argv[1])->process()->getArrays();
+		} else {
+			die("Unrecognized file extension. ");
+		}
 		
-		//var_dump($result);
+		var_dump($result);
 		
 		$r=new Graph\Render();
-		$r->rStart()->rNodes($result["nodes"])->rEdges($result["edges"])->rEnd();
+		//$r->rStart()->rNodes($result["nodes"])->rEdges($result["edges"])->rEnd();
 	} else {
 		echo 'Usage: php '.__FILE__.' trace.xt'.NL;
 	}

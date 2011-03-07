@@ -1,0 +1,14 @@
+[connection]
+dsn="mysql:host=127.0.0.1;dbname=kunstmarkt-tmp"
+user="graphpish"
+password="****"
+
+[node:bereich]
+table=cms_bereich
+label=titel
+id=id
+
+[edge:bereich-bereich]
+table=news_artikel_artikel
+id1=bereich_id
+id2=bezug_bereich_id

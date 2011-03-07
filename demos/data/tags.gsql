@@ -1,0 +1,27 @@
+;this is basicly a DSL
+; based on .ini file format 
+; setting up all information we need about the databse
+
+[connection]
+;dsn=sqlite:/tmp/foo.db
+dsn="mysql:host=127.0.0.1;dbname=bxt"
+user="graphpish"
+password="****"
+
+[node:entry]
+table=blogeintraege
+label=Titel
+id=ID
+
+[node:tag]
+table=blogtags
+label=name
+id=ID
+
+[node:tag/display]
+color="#99000099"
+
+[edge:entry-tag]
+table=blogtaglinks
+id1=ID_entry
+id2=ID_tag
