@@ -6,7 +6,7 @@ namespace Graphpish;
 init();
 
 if(isset($argv[0])&&basename(__FILE__)==basename($argv[0])) {
-	cli($argv);
+	Cli::run($argv);
 }
 
 function init(){
@@ -35,27 +35,6 @@ function init(){
 	$l_own->register();
 	$l_lib=new SplClassLoader(null,$path.'lib/');
 	$l_own->register();
-}
-
-function cli($argv){
-	if(count($argv)==2) {
-		if(strrchr($argv[1],'.')==".xt") {
-			$p=new Trace\Parser();
-			$result=$p->parse($argv[1])->getArrays();
-		} elseif (strrchr($argv[1],'.')==".gsql") {
-			$p=new Sql\Client();
-			$result=$p->addSource($argv[1])->process()->getArrays();
-		} else {
-			die("Unrecognized file extension. ");
-		}
-		
-		var_dump($result);
-		
-		$r=new Graph\Render();
-		//$r->rStart()->rNodes($result["nodes"])->rEdges($result["edges"])->rEnd();
-	} else {
-		echo 'Usage: php '.__FILE__.' trace.xt'.NL;
-	}
 }
 
 __HALT_COMPILER(); ?>
