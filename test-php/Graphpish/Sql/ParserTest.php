@@ -5,14 +5,16 @@ require_once 'graphpish.php';
 
 class ParserTest extends \PHPUnit_Framework_TestCase {
 	public function testItitialisation() {
-		$p=new Parser("node","edge");
+		$p=new Parser();
+		$p->process(array("node"=>array(),"edge"=>array()));
 		$this->assertEquals(array("node"=>array(),"edge"=>array()),$p->getOpts(),"start options");
 	}
 	/**
 	 * @dataProvider sampleArrays
 	 */
 	public function testArrayManipulation($input,$expecedOutput) {
-		$p=new Parser("node","edge");
+		$p=new Parser();
+		$p->process(array("node"=>array(),"edge"=>array()));
 		$p->process($input);
 		$this->assertEquals($expecedOutput,$p->getOpts());
 	}

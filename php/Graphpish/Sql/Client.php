@@ -7,6 +7,7 @@ class Client {
 	private $options;
 	public function __construct($file=false) {
 		$this->options=new Parser();
+		$this->options->process(array("node"=>array(),"edge"=>array()));
 		if($file) {
 			$this->addSource($file);
 		}

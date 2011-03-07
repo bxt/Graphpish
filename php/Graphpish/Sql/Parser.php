@@ -4,8 +4,6 @@ namespace Graphpish\Sql;
 class Parser {
 	private $options=array();
 	function __construct() {
-		$this->options["node"]=array();
-		$this->options["edge"]=array();
 	}
 	function process($rawData) {
 		foreach($rawData as $rawSection=>$sectionData) {
