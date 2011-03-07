@@ -1,7 +1,7 @@
 <?php
 namespace Graphpish\Graph;
 
-require 'phar://graphpish.phar';
+require_once 'graphpish.php';
 
 class WeightedTest extends \PHPUnit_Framework_TestCase {
 	public function testGetWeight() {

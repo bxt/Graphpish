@@ -22,7 +22,7 @@ phar: clean
 	find php -type f -iname "*.php" | xargs ${PHP_PATH}/php -d phar.readonly=0 ${PHP_PATH}/phar pack -f "${BUILD_NAME}.phar" -s "${BUILD_NAME}.php" 
 	chmod a+x "${BUILD_NAME}.phar"
 
-test: phar
+test: clean
 	@echo
 	@echo "Running tests..."
 	@echo
