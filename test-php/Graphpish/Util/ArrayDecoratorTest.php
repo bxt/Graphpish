@@ -56,6 +56,18 @@ class ArrayDecoratorTest extends \PHPUnit_Framework_TestCase {
 		$back=$decorated_array->get_deep(array("a","k","l","m","n","o","p"));
 		$this->assertEquals($n2,$back);
 	}
+	/**
+	 * @dataProvider numbers
+	 * @depends testReallyDeepInsert
+	 */
+	public function testFlatten($n1,$n2,$n3) {
+		$our_array=array("b"=>$n1);
+		$decorated_array=new ArrayDecorator($our_array);
+		$decorated_array->store_deep(array("a","k","l","m","n","o","p"),$n2);
+		$decorated_array->store_deep(array("a","k","l","m","n","o","q"),$n3);
+		$back=$decorated_array->flatten();
+		$this->assertEquals(array($n1,$n2,$n3),$back);
+	}
 	
 	public function numbers() {
 		return array(

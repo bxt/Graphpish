@@ -31,4 +31,13 @@ class ArrayDecorator {
 		}
 		return $unit;
 	}
+	function flatten() {
+		$flat=new \stdClass;
+		$flat->a=array();
+		array_walk_recursive($this->array,"\\Graphpish\\Util\\ArrayDecorator::flatten_inner",$flat);
+		return $flat->a;
+	}
+	private static function flatten_inner($val,$key,$flat) {
+		$flat->a[]=$val;
+	}
 }
