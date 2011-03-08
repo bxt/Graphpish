@@ -16,10 +16,7 @@ class Store {
 	public function __construct($keydepth,$defaultClass=false,$annotReader=false) {
 		if($keydepth<1) throw new \Exception("Invalid Keydepth: $keydepth");
 		$this->keydepth=$keydepth;
-		$this->annotReader=$annotReader;
-		if(!$this->annotReader) {
-			$this->annotReader=new \Doctrine\Common\Annotations\AnnotationReader();
-		}
+		$this->annotReader=$annotReader ?: new \Doctrine\Common\Annotations\AnnotationReader;
 		$this->defaultClass=$defaultClass;
 		/* 
 		 * pre-autoload set of annotations, this prevents docblock parser
