@@ -34,7 +34,7 @@ function init(){
 	$l_own=new SplClassLoader(__NAMESPACE__,$path.'php/');
 	$l_own->register();
 	$l_lib=new SplClassLoader(null,$path.'lib/');
-	$l_own->register();
+	$l_lib->register();
 }
 
 __HALT_COMPILER(); ?>
