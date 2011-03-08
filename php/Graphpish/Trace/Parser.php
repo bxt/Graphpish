@@ -12,6 +12,12 @@ class Parser extends \Graphpish\Util\FilelinesParser {
 	function parseLine($l) {
 		$l=substr($l,26);
 		preg_match('/^( *)(.*)/s',$l,$startWs);
+		/* 
+		 * One could of course use ltrim($l," ") here, but it turns out 
+		 * if you need the indentation level too another strlen for 
+		 * calculating the length difference really sums up. 
+		 * @see https://gist.github.com/846504
+		 */
 		if(isset($startWs[0])) {
 			preg_match('/^-> (.+)\((.*)\) (.+):(\d+)$/',$startWs[2],$functionCall);
 			if(isset($functionCall[0])) {
