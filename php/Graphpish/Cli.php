@@ -14,7 +14,9 @@ abstract class Cli {
 			} elseif (strrchr($argv[1],'.')==".gsql") {
 				$p=new Sql\Client();
 				$result=$p->addSource($argv[1])->process()->getArrays();
-				var_dump($result);
+				//var_dump($result);
+				$r=new Graph\Render();
+				$r->rStart()->rNodes($result["nodes"])->rEdges($result["edges"])->rEnd();
 				
 			} else {
 				die("Unrecognized file extension. ");
