@@ -5,7 +5,10 @@ class Edge extends Element {
 	private $from;
 	private $to;
 	
-	private function __construct($from,$to) {
+	/**
+	 * @Graphpish\Util\ObjectMap\KeyConstructorA(1)
+	 */
+	public function __construct($from,$to) {
 		$this->from=$from;
 		$this->to=$to;
 		if(!isset(self::$byLabels[$from->getLabel()])) {
@@ -14,9 +17,16 @@ class Edge extends Element {
 		self::$byLabels[$from->getLabel()][$to->getLabel()]=$this;
 	}
 	
+	/**
+	 * @Graphpish\Util\ObjectMap\KeyA(0)
+	 */
 	public function getFrom() {
 		return $this->from;
 	}
+	
+	/**
+	 * @Graphpish\Util\ObjectMap\KeyA(1)
+	 */
 	public function getTo() {
 		return $this->to;
 	}

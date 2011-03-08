@@ -4,11 +4,17 @@ namespace Graphpish\Graph;
 class Node extends Element implements HasLabelI {
 	private $label;
 	
-	private function __construct($label) {
+	/**
+	 * @Graphpish\Util\ObjectMap\KeyConstructorA(0)
+	 */
+	public function __construct($label) {
 		$this->label=$label;
 		self::$byLabel[$label]=$this;
 	}
 	
+	/**
+	 * @Graphpish\Util\ObjectMap\KeyA(0)
+	 */
 	public function getLabel() {
 		return $this->label;
 	}
