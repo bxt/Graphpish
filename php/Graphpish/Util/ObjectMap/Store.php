@@ -25,8 +25,8 @@ class Store {
 		 * pre-autoload set of annotations, this prevents docblock parser
 		 * from loading classes for every @bla documentation
 		 */
-		class_exists('\\'.static::KEY_ANNOT,true);
-		class_exists('\\'.static::CONSTR_ANNOT,true);
+		class_exists(static::KEY_ANNOT,true);
+		class_exists(static::CONSTR_ANNOT,true);
 	}
 	public function store($obj) {
 		$keys=$this->getKeys($obj,$this->keydepth);
