@@ -23,4 +23,12 @@ class ArrayDecorator {
 		$unit=$value;
 		return $this;
 	}
+	function get_deep($keys) {
+		$keys=array_values($keys);
+		$unit=&$this->array;
+		for($i=0;$i<count($keys);$i++) {
+			$unit=&$unit[$keys[$i]];
+		}
+		return $unit;
+	}
 }

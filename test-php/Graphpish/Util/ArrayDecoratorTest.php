@@ -4,33 +4,68 @@ namespace Graphpish\Util;
 require_once 'graphpish.php';
 
 class ArrayDecoratorTest extends \PHPUnit_Framework_TestCase {
-	public function testGet() {
-		$our_array=array("b"=>4);
+	/**
+	 * @dataProvider numbers
+	 */
+	public function testGet($n1,$n2,$n3) {
+		$our_array=array("b"=>$n1);
 		$decorated_array=new ArrayDecorator($our_array);
 		$our_array_again=&$decorated_array->get();
-		$our_array_again["x"]=6;
-		$this->assertEquals(array("b"=>4,"x"=>6),$our_array);
+		$our_array_again["x"]=$n2;
+		$this->assertEquals(array("b"=>$n1,"x"=>$n2),$our_array);
 	}
-	public function testDeepInsert() {
-		$our_array=array("b"=>4);
+	/**
+	 * @dataProvider numbers
+	 */
+	public function testDeepInsert($n1,$n2,$n3) {
+		$our_array=array("b"=>$n1);
 		$decorated_array=new ArrayDecorator($our_array);
-		$decorated_array->store_deep(array("a","k"),3);
-		$this->assertEquals(array("b"=>4,"a"=>array("k"=>3)),$our_array);
+		$decorated_array->store_deep(array("a","k"),$n2);
+		$this->assertEquals(array("b"=>$n1,"a"=>array("k"=>$n2)),$our_array);
 		$this->assertEquals($our_array,$decorated_array->get());
 	}
-	public function testReallyDeepInsert() {
-		$our_array=array("b"=>4);
+	/**
+	 * @dataProvider numbers
+	 */
+	public function testReallyDeepInsert($n1,$n2,$n3) {
+		$our_array=array("b"=>$n1);
 		$decorated_array=new ArrayDecorator($our_array);
-		$decorated_array->store_deep(array("a","k","l","m","n","o","p"),3);
-		$this->assertEquals(array("b"=>4,"a"=>array("k"=>array("l"=>array("m"=>array("n"=>array("o"=>array("p"=>3))))))),$our_array);
+		$decorated_array->store_deep(array("a","k","l","m","n","o","p"),$n2);
+		$this->assertEquals(array("b"=>$n1,"a"=>array("k"=>array("l"=>array("m"=>array("n"=>array("o"=>array("p"=>$n2))))))),$our_array);
 		$this->assertEquals($our_array,$decorated_array->get());
 	}
-	public function testReallyDeepInsertTwice() {
-		$our_array=array("b"=>4);
+	/**
+	 * @dataProvider numbers
+	 */
+	public function testReallyDeepInsertTwice($n1,$n2,$n3) {
+		$our_array=array("b"=>$n1);
 		$decorated_array=new ArrayDecorator($our_array);
-		$decorated_array->store_deep(array("a","k","l","m","n","o","p"),3);
-		$decorated_array->store_deep(array("a","k","l","m","n","o","p"),6);
-		$this->assertEquals(array("b"=>4,"a"=>array("k"=>array("l"=>array("m"=>array("n"=>array("o"=>array("p"=>6))))))),$our_array);
+		$decorated_array->store_deep(array("a","k","l","m","n","o","p"),$n2);
+		$decorated_array->store_deep(array("a","k","l","m","n","o","p"),$n3);
+		$this->assertEquals(array("b"=>$n1,"a"=>array("k"=>array("l"=>array("m"=>array("n"=>array("o"=>array("p"=>$n3))))))),$our_array);
 		$this->assertEquals($our_array,$decorated_array->get());
+	}
+	/**
+	 * @dataProvider numbers
+	 * @depends testReallyDeepInsert
+	 */
+	public function testGetDeep($n1,$n2,$n3) {
+		$our_array=array("b"=>$n1);
+		$decorated_array=new ArrayDecorator($our_array);
+		$decorated_array->store_deep(array("a","k","l","m","n","o","p"),$n2);
+		$back=$decorated_array->get_deep(array("a","k","l","m","n","o","p"));
+		$this->assertEquals($n2,$back);
+	}
+	
+	public function numbers() {
+		return array(
+			array(1,1,1),
+			array(1,2,1),
+			array(2,1,1),
+			array(1,1,2),
+			array(1,2,3),
+			array(4,6,3),
+			array(234,342523,9323),
+		);
 	}
 }
