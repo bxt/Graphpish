@@ -18,6 +18,15 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
 		$p->process($input);
 		$this->assertEquals($expecedOutput,$p->getOpts());
 	}
+	public function testSubsequentCalls() {
+		$p=new Parser();
+		$p->process(array("node"=>array(),"edge"=>array()));
+		$this->assertEquals(array("node"=>array(),"edge"=>array()),$p->getOpts());
+		$p->process(array("node"=>array(),"edge"=>array("a"=>"t1"),"foo:bar"=>array("x"=>"y")));
+		$this->assertEquals(array("node"=>array(),"edge"=>array("a"=>"t1"),"foo"=>array("bar"=>array("x"=>"y"))),$p->getOpts());
+		$p->process(array("edge-a"=>"t2","foo:bar/x"=>"z"));
+		$this->assertEquals(array("node"=>array(),"edge"=>array("a"=>"t2"),"foo"=>array("bar"=>array("x"=>"z"))),$p->getOpts());
+	}
 	
 	public function sampleArrays() {
 		return array(
@@ -63,6 +72,16 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
 				"node"=>array("bla"=>array("blubb"=>array("clone"=>array("nopt1"=>"noptval1","nopt2"=>"noptval2")))),
 				"edge"=>array("home"=>array("boy"=>array("ich-kann-es-sehn"=>array("du-wuerdest-gerne"=>array("sein"=>array("wie"=>array("ich"=>array("eopt1"=>"eoptval1","eopt2"=>"eoptval2")))))))),
 				"connection"=>array("opt1"=>"optval1","opt2"=>"optval2"),
+			)),
+			array(array(
+				"con::nection"=>array("opt1"=>"optval1","opt2"=>"optval2")
+			),array(
+				"node"=>array(),"edge"=>array(),"con"=>array("nection"=>array("opt1"=>"optval1","opt2"=>"optval2"))
+			)),
+			array(array(
+				"con-nect:ion"=>array("opt1"=>"optval1","opt2"=>"optval2")
+			),array(
+				"node"=>array(),"edge"=>array(),"con"=>array("nect:ion"=>array("opt1"=>"optval1","opt2"=>"optval2"))
 			)),
 		);
 	}

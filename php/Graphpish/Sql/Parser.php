@@ -23,7 +23,8 @@ class Parser {
 	 * 
 	 * This section would create 4 dimensions. Notice that while
 	 * you can repeat the level delimiters, you can't change their
-	 * order currently.
+	 * order currently. Lower priority delimiters will then be
+	 * ignored. Empty path pieces will be ignored too. 
 	 * 
 	 * Subsequent calls to this method on the same instance will
 	 * override older values. 
