@@ -59,6 +59,36 @@ class StoreTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * @dataProvider keys
 	 */
+	public function testConstructConstructorDefaultClass($key1,$key2) {
+		$om=new Store(1,__NAMESPACE__."\\A");
+		$a2=$om->getOrMake(false,$key1);
+		$this->assertEquals($key1,$a2->getFoo());
+		$this->assertEquals('default-bar',$a2->getBar());
+	}
+	/**
+	 * @expectedException Exception
+	 */
+	public function testConstructConstructorDefaultClassWithoutActuallyHavingOne() {
+		$om=new Store(1);
+		$a2=$om->getOrMake(false,100);
+	}
+	/**
+	 * @expectedException Exception
+	 */
+	public function testStoringAnnotationlessObject() {
+		$c=new C;
+		$om=new Store(1);
+		$om->store($c);
+	}
+	/**
+	 * @expectedException Exception
+	 */
+	public function testConstructWithSillyParam() {
+		$om=new Store(0);
+	}
+	/**
+	 * @dataProvider keys
+	 */
 	public function testConstructConstructorDual($key1,$key2) {
 		$om=new Store(2);
 		$a2=$om->getOrMake(__NAMESPACE__."\\A",$key1,$key2);
@@ -112,6 +142,15 @@ class StoreTest extends \PHPUnit_Framework_TestCase {
 		$om->store($a);
 		$om->store($b);
 		$this->assertEquals(array($a,$b),$om->dump());
+	}
+	/**
+	 * @expectedException Exception
+	 */
+	public function testGetException() {
+		$om=new Store(1);
+		$a=new A(1,2);
+		$om->store($a);
+		$a2=$om->get(1,2);
 	}
 	public function keys() {
 		return array(
@@ -171,3 +210,4 @@ class B {
 		return $b;
 	}
 }
+class C {}

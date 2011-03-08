@@ -14,6 +14,7 @@ class Store {
 	const KEY_ANNOT='Graphpish\\Util\\ObjectMap\\KeyA';
 	const CONSTR_ANNOT='Graphpish\\Util\\ObjectMap\\KeyConstructorA';
 	public function __construct($keydepth,$defaultClass=false,$annotReader=false) {
+		if($keydepth<1) throw new \Exception("Invalid Keydepth: $keydepth");
 		$this->keydepth=$keydepth;
 		$this->annotReader=$annotReader;
 		if(!$this->annotReader) {
@@ -107,7 +108,6 @@ class Store {
 				$good=$good&&isset($info["key"][$i]);
 			}
 			if(!$good) {
-				var_dump($info);
 				throw new \Exception("Class $class is not suitable for mapping keydepth {$depth}. Mising annotations?");
 			}
 			$this->annotCache[$depth][$class]=$info;
