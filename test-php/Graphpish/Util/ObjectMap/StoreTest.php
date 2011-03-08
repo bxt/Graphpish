@@ -175,6 +175,10 @@ class A {
 		$this->bar=$key2;
 	}
 	/**
+	 * Here could go method description
+	 * 
+	 * @return mixed The Fooh
+	 * 
 	 * @Graphpish\Util\ObjectMap\KeyA(0)
 	 */
 	public function getFoo() {
