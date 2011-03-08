@@ -1,12 +1,12 @@
 <?php
-namespace Graphpish\Sql;
+namespace Graphpish\Util;
 
 /**
  * Parse multi-dimensional ini-Data from cascading files
  * 
- * @see \Graphpish\Sql\Parser::process()
+ * @see \Graphpish\Util\DeepIniParser::process()
  */
-class Parser {
+class DeepIniParser {
 	/**
 	 * Store current options
 	 */
@@ -30,7 +30,7 @@ class Parser {
 	 * override older values. 
 	 *
 	 * @param array Like the ones returned by parse_ini_file()/string()
-	 * @return \Graphpish\Sql\Parser this (chainable)
+	 * @return \Graphpish\Util\DeepIniParser this (chainable)
 	 */
 	function process($rawData) {
 		foreach($rawData as $rawSection=>$sectionData) {

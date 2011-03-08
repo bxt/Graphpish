@@ -1,11 +1,11 @@
 <?php
-namespace Graphpish\Sql;
+namespace Graphpish\Util;
 
 require_once 'graphpish.php';
 
-class ParserTest extends \PHPUnit_Framework_TestCase {
+class DeepIniParserTest extends \PHPUnit_Framework_TestCase {
 	public function testItitialisation() {
-		$p=new Parser();
+		$p=new DeepIniParser();
 		$p->process(array("node"=>array(),"edge"=>array()));
 		$this->assertEquals(array("node"=>array(),"edge"=>array()),$p->getOpts(),"start options");
 	}
@@ -13,13 +13,13 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
 	 * @dataProvider sampleArrays
 	 */
 	public function testArrayManipulation($input,$expecedOutput) {
-		$p=new Parser();
+		$p=new DeepIniParser();
 		$p->process(array("node"=>array(),"edge"=>array()));
 		$p->process($input);
 		$this->assertEquals($expecedOutput,$p->getOpts());
 	}
 	public function testSubsequentCalls() {
-		$p=new Parser();
+		$p=new DeepIniParser();
 		$p->process(array("node"=>array(),"edge"=>array()));
 		$this->assertEquals(array("node"=>array(),"edge"=>array()),$p->getOpts());
 		$p->process(array("node"=>array(),"edge"=>array("a"=>"t1"),"foo:bar"=>array("x"=>"y")));

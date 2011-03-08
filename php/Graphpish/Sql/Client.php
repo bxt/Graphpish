@@ -2,11 +2,12 @@
 namespace Graphpish\Sql;
 use Graphpish\Graph\Edge;
 use Graphpish\Graph\Node;
+use Graphpish\Util\DeepIniParser;
 
 class Client {
 	private $options;
 	public function __construct($file=false) {
-		$this->options=new Parser();
+		$this->options=new DeepIniParser();
 		$this->options->process(array("node"=>array(),"edge"=>array()));
 		if($file) {
 			$this->addSource($file);
