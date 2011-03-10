@@ -26,22 +26,31 @@ class Client {
 		$nodes=$this->nodes; // :(
 		$edges=$this->edges;
 		foreach($opts["node"] as $nodeType=>$nodeTypeSqlInfo) {
-			$q='SELECT '.$nodeTypeSqlInfo["id"].' as id,'.$nodeTypeSqlInfo["label"].' as label FROM '.$nodeTypeSqlInfo["table"].' as nodes';
-			foreach ($conn->query($q) as $sqlNode) {
-				//$label=$nodeType.'\\'.$sqlNode['label'];
-				$label=$nodeType.'\\'.$sqlNode['id'];
-				$nodes($label)->increaseWeight(1);
+			$q=sprintf('SELECT %s as id, %s as label FROM %s as nodes ',
+				$nodeTypeSqlInfo["id"],$nodeTypeSqlInfo["label"],$nodeTypeSqlInfo["table"]);
+			$result=$conn->query($q);
+			if(!$result) throw new \Exception('SQL-Error on ['.$nodeType.']: '.json_encode($conn->errorInfo()));
+			foreach ($result as $sqlNode) {
+				$label=$nodeType.'\\'.$sqlNode['label'];
+				$id=$nodeType.'\\'.$sqlNode['id'];
+				$node=$nodes($id)->increaseWeight(1)->setLabel($label);
+				if(isset($nodeTypeSqlInfo['display'])) {
+					$node->setRenderOpts($nodeTypeSqlInfo['display']);
+				}
 			}
 		}
 		
 		foreach($opts["edge"] as $fromNT=>$toList) {
 			foreach($toList as $toNT=>$edgeTypeSqlInfo) {
-				$q='SELECT '.$edgeTypeSqlInfo["id1"].' as id1,'.$edgeTypeSqlInfo["id2"].' as id2, count(*) as weight  FROM '.$edgeTypeSqlInfo["table"].' as edges GROUP BY id1,id2';
-				foreach ($conn->query($q) as $sqlEdge) {
-					$label1=$fromNT.'\\'.$sqlEdge['id1'];
-					$label2=$toNT.'\\'.$sqlEdge['id2'];
-					$node1=$nodes($label1)->increaseWeight(1);
-					$node2=$nodes($label2)->increaseWeight(1);
+				$q=sprintf('SELECT %s as id1, %s as id2, count(*) as weight FROM %s as edges GROUP BY id1,id2',
+					$edgeTypeSqlInfo["id1"],$edgeTypeSqlInfo["id2"],$edgeTypeSqlInfo["table"]);
+				$result=$conn->query($q);
+			if(!$result) throw new \Exception('SQL-Error on ['.$fromNT.'-'.$toNT.']: '.json_encode($conn->errorInfo()));
+				foreach ($result as $sqlEdge) {
+					$id1=$fromNT.'\\'.$sqlEdge['id1'];
+					$id2=$toNT.'\\'.$sqlEdge['id2'];
+					$node1=$nodes($id1)->increaseWeight(1);
+					$node2=$nodes($id2)->increaseWeight(1);
 					$edges($node1,$node2)->increaseWeight($sqlEdge['weight']);
 				}
 			}

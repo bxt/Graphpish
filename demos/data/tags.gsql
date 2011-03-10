@@ -13,6 +13,9 @@ table=blogeintraege
 label=Titel
 id=ID
 
+[node:entry/display]
+shape="box"
+
 [node:tag]
 table=blogtags
 label=name
