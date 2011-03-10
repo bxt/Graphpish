@@ -1,0 +1,12 @@
+[connection]
+dsn="sqlite:/home/amoebe/Documents/graphviz/graphpish/demos/data/makefile-dependencies.sqlite"
+
+[node:routine]
+table=routines
+label=name
+id=id
+
+[edge:routine-routine]
+table=dependencies
+id1=routine_id
+id2=depends_on_routine_id
