@@ -4,15 +4,53 @@ use Graphpish\Util\ArrayDecorator;
 
 class Store {
 	/**
+	 * How many keys will be used
+	 * 
+	 * $keycnt-1 is the max key level
+	 * Key level is the value of the annotations
 	 * @var int
 	 */
 	private $keycnt;
+	
+	/**
+	 * The actual database
+	 */
 	private $data=array();
+	
+	/**
+	 * Caching parsed annotation data for depth/classes here
+	 */
 	private $annotCache=array();
+
+	/**
+	 * Object that will return annotations for reflection methods
+	 */
 	private $annotReader;
+	
+	/**
+	 * Qualified name srting of the class used by getOrMake() by default
+	 */
 	private $defaultClass;
+	
+	/**
+	 * Qualified name srting of the annotation that marks a method which returns a key
+	 */
 	const KEY_ANNOT='Graphpish\\Util\\ObjectMap\\KeyA';
+	
+	/**
+	 * Qualified name srting of the annotation that marks the constructor
+	 * 
+	 * You can mark the actual constructor or a public static method that
+	 * should return an instance of the class. 
+	 */
 	const CONSTR_ANNOT='Graphpish\\Util\\ObjectMap\\KeyConstructorA';
+	
+	/**
+	 * Initialize
+	 * 
+	 * We do use a fixed key count across the whole instance, this
+	 * has to be set. 
+	 */
 	public function __construct($keycnt,$defaultClass=false,$annotReader=false) {
 		if($keycnt<1) throw new \Exception("Invalid Keydepth: $keycnt");
 		$this->keycnt=$keycnt;
@@ -25,16 +63,27 @@ class Store {
 		class_exists(static::KEY_ANNOT,true);
 		class_exists(static::CONSTR_ANNOT,true);
 	}
+	/**
+	 * Save an object into our keyed database
+	 */
 	public function store($obj) {
 		$keys=$this->getKeys($obj,$this->keycnt);
 		$data=new ArrayDecorator($this->data);
 		$data->store_deep($keys,$obj);
 		return $this;
 	}
+	/**
+	 * Get all ever saved objects in a flat array
+	 */
 	public function dump() {
 		$data=new ArrayDecorator($this->data);
 		return $data->flatten();
 	}
+	/**
+	 * Retrieve an object by its keys
+	 * 
+	 * Use keys as parameters. 
+	 */
 	public function get() {
 		$args=func_get_args();
 		if(count($args)>$this->keycnt) {
@@ -46,6 +95,11 @@ class Store {
 		$data=new ArrayDecorator($this->data);
 		return $data->get_deep($args);
 	}
+	/**
+	 * Retrieve an object by its keys, or construct
+	 * 
+	 * Use a class name to construct and after that keys as parameters. 
+	 */
 	public function getOrMake($class=false) {
 		$args=func_get_args();
 		array_shift($args);
@@ -56,9 +110,15 @@ class Store {
 		$this->store($new);
 		return $new;
 	}
+	/**
+	 * How many keys this storage uses
+	 */
 	public function getKeyCount() {
 		return $this->keycnt;
 	}
+	/**
+	 * The instance building part of getOrMake()
+	 */
 	private function make($class=false) {
 		$args=func_get_args();
 		array_shift($args);
@@ -78,6 +138,12 @@ class Store {
 		}
 		return $new;
 	}
+	/**
+	 * Gather all the attached information about a class
+	 * 
+	 * This reads the annotations, checks which methods to
+	 * use as key generators and looks for constructors. 
+	 */
 	private function getAnnotinfo($class,$depth) {
 		if(!isset($this->annotCache[$depth][$class])) {
 			$info=array();
@@ -114,6 +180,9 @@ class Store {
 		}
 		return $this->annotCache[$depth][$class];
 	}
+	/**
+	 * Get the list of keys of an object
+	 */
 	private function getKeys($obj,$depth) {
 		$info=$this->getAnnotinfo(get_class($obj),$depth);
 		$keys=array();
@@ -122,6 +191,12 @@ class Store {
 		}
 		return $keys;
 	}
+	/**
+	 * Return keys that can be used by our php array store
+	 * 
+	 * We can use string and int directly, and convert anything else (e.g. float)
+	 * to strings. When using object we try to use their key.
+	 */
 	private function getSuitableKey($key) {
 		if(is_int($key)) return $key;
 		if(is_string($key)) return $key;
