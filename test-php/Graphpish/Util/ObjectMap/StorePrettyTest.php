@@ -3,6 +3,8 @@ namespace Graphpish\Util\ObjectMap;
 
 require_once 'graphpish.php';
 
+require_once 'test-php/Graphpish/Util/ObjectMap/testclasses.php';
+
 class StorePrettyTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * @dataProvider keys
@@ -10,6 +12,22 @@ class StorePrettyTest extends \PHPUnit_Framework_TestCase {
 	public function testConstructStatic($key1,$key2) {
 		$om=new StorePretty(1);
 		$a2=$om(__NAMESPACE__."\\B",$key1);
+		$this->assertEquals($key1,$a2->getFoo());
+	}
+	/**
+	 * @expectedException Exception
+	 */
+	public function testTooFewArgs() {
+		$om=new StorePretty(2);
+		$a2=$om(__NAMESPACE__."\\B",'needed another key ;( ');
+		$this->assertEquals($key1,$a2->getFoo());
+	}
+	/**
+	 * @expectedException Exception
+	 */
+	public function testTooManyArgs() {
+		$om=new StorePretty(1);
+		$a2=$om(__NAMESPACE__."\\B",'this is needed',' another key ;( ');
 		$this->assertEquals($key1,$a2->getFoo());
 	}
 	/**
@@ -72,53 +90,3 @@ class StorePrettyTest extends \PHPUnit_Framework_TestCase {
 		);
 	}
 }
-
-class A {
-	/**
-	 * @Graphpish\Util\ObjectMap\KeyConstructorA(1)
-	 */
-	public function __construct($key1,$key2) {
-		$this->foo=$key1;
-		$this->bar=$key2;
-	}
-	/**
-	 * Here could go method description
-	 * 
-	 * @return mixed The Fooh
-	 * 
-	 * @Graphpish\Util\ObjectMap\KeyA(0)
-	 */
-	public function getFoo() {
-		return $this->foo;
-	}
-	/**
-	 * @Graphpish\Util\ObjectMap\KeyA(1)
-	 */
-	public function getBar() {
-		return $this->bar;
-	}
-	/**
-	 * @Graphpish\Util\ObjectMap\KeyConstructorA(0)
-	 */
-	public static function newByFoo($key1) {
-		$a=new self($key1,'default-bar');
-		return $a;
-	}
-}
-class B {
-	/**
-	 * @Graphpish\Util\ObjectMap\KeyA(0)
-	 */
-	public function getFoo() {
-		return $this->foo;
-	}
-	/**
-	 * @Graphpish\Util\ObjectMap\KeyConstructorA(0)
-	 */
-	public static function newByKey($key) {
-		$b=new self();
-		$b->foo=$key;
-		return $b;
-	}
-}
-class C {}
