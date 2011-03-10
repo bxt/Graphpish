@@ -9,6 +9,7 @@ abstract class Element extends Weighted {
 	}
 	public function setRenderOpt($name,$val) {
 		$this->renderOpts[$name]=(string)$val;
+		return $this;
 	}
 	public function setRenderOpts(array $opts) {
 		foreach($opts as $rOpt=>$rOptVal) {
@@ -16,5 +17,6 @@ abstract class Element extends Weighted {
 				$this->setRenderOpt($rOpt,$rOptVal);
 			}
 		}
+		return $this;
 	}
 }
