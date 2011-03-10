@@ -9,6 +9,10 @@ abstract class Cli {
 				$p=new Filetree\Traversor();
 				$graph=$p->traverse($argv[1])->getGraph();
 				
+			} elseif(strrchr($argv[1],'.')==".xml") {
+				$p=new Xml\Reader();
+				$graph=$p->read($argv[1])->getGraph();
+				
 			} elseif(strrchr($argv[1],'.')==".xt") {
 				$p=new Trace\Parser();
 				$graph=$p->parse($argv[1])->getGraph();
