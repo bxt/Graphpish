@@ -55,3 +55,4 @@ demos: phar cleandemos
 	@echo
 	(cd demos && ./simple.sh)
 	(cd demos && ./own-trace.sh)
+	(cd demos && ./tag-database.sh)
