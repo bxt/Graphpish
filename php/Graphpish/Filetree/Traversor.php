@@ -24,7 +24,6 @@ class Traversor {
 		foreach($files as $file) {
 			if($file[0]=='.') continue;
 			$path=$dir.'/'.$file;
-			//echo $path.NL;
 			$node=$nodes($path)->increaseWeight()->setLabel($file);
 			$edges($parent,$node)->increaseWeight();
 			if(is_dir($path)) {

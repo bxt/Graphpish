@@ -2,19 +2,20 @@
 namespace Graphpish\Graph;
 
 class Render {
+	const NL="\n";
 	function rStart($root=false) {
-		echo 'strict digraph G {'.NL.NL;
-		echo '  overlap=false'.NL;
+		echo 'strict digraph G {'.self::NL.self::NL;
+		echo '  overlap=false'.self::NL;
 		if($root!==false) {
-			echo '  root='.$root->getRenderId().NL;
+			echo '  root='.$root->getRenderId().self::NL;
 		}
-		echo '  splines=true'.NL;
-		echo '  epsilon=0.0000001'.NL;
-		echo '  sep=.2'.NL;
-		echo NL;
-		echo '  node [fontsize=9]'.NL;
-		echo '  edge [fontsize=7]'.NL;
-		echo NL.NL;
+		echo '  splines=true'.self::NL;
+		echo '  epsilon=0.0000001'.self::NL;
+		echo '  sep=.2'.self::NL;
+		echo self::NL;
+		echo '  node [fontsize=9]'.self::NL;
+		echo '  edge [fontsize=7]'.self::NL;
+		echo self::NL.self::NL;
 		return $this;
 	}
 	function rNodes($nodes) {
@@ -24,9 +25,9 @@ class Render {
 			echo ' penwidth='.self::strokeWith($weight).', ';
 			echo ' label = '.self::labelEsc($node->getLabel());
 			echo self::attributesFromArray($node->getRenderOpts());
-			echo ' ];'.NL;
+			echo ' ];'.self::NL;
 		}
-		echo NL.NL;
+		echo self::NL.self::NL;
 		return $this;
 	}
 	
@@ -39,15 +40,15 @@ class Render {
 			echo ' label='.self::labelEsc($edge->getLabel()).',';
 			echo ' color="#'.static::randomColor(true).'99"';
 			echo self::attributesFromArray($edge->getRenderOpts());
-			echo ' ];'.NL;
+			echo ' ];'.self::NL;
 		}
-		echo NL.NL;
+		echo self::NL.self::NL;
 		return $this;
 	}
 	
 	function rEnd() {
 	echo '}';
-	echo NL.NL;
+	echo self::NL.self::NL;
 	return $this;
 	}
 	protected static function strokeWith($weight) {

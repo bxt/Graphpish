@@ -20,8 +20,6 @@ function init(){
 			die("graphpish requires PHAR Extension with compression support. \n");
 	}
 	
-	define('NL',"\n");
-	
 	if(strrchr(__FILE__, '.')==".phar") {
 		$path='phar://'.__FILE__.'/';
 	} else {

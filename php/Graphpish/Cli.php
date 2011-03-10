@@ -31,7 +31,7 @@ abstract class Cli {
 			}
 			
 		} else {
-			echo 'Usage: php '.__FILE__.' trace.xt|dbconfig.gsql'.NL;
+			echo 'Usage: php '.__FILE__.' trace.xt|dbconfig.gsql'."\n";
 		}
 	}
 }
