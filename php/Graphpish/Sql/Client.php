@@ -1,7 +1,7 @@
 <?php
 namespace Graphpish\Sql;
 use Graphpish\Util\DeepIniParser;
-use Graphpish\Util\ObjectMap\Store;
+use Graphpish\Util\ObjectMap\StorePretty;
 
 class Client {
 	private $options;
@@ -9,8 +9,8 @@ class Client {
 	private $nodes;
 	public function __construct($file=false) {
 		$this->options=new DeepIniParser();
-		$this->nodes=new Store(1,'Graphpish\Graph\Node');
-		$this->edges=new Store(2,'Graphpish\Graph\Edge');
+		$this->nodes=new StorePretty(1,'Graphpish\Graph\Node');
+		$this->edges=new StorePretty(2,'Graphpish\Graph\Edge');
 		$this->options->process(array("node"=>array(),"edge"=>array()));
 		if($file) {
 			$this->addSource($file);
@@ -23,12 +23,14 @@ class Client {
 	public function process() {
 		$opts=$this->options->getOpts();
 		$conn=$this->connect();
+		$nodes=$this->nodes; // :(
+		$edges=$this->edges;
 		foreach($opts["node"] as $nodeType=>$nodeTypeSqlInfo) {
 			$q='SELECT '.$nodeTypeSqlInfo["id"].' as id,'.$nodeTypeSqlInfo["label"].' as label FROM '.$nodeTypeSqlInfo["table"].' as nodes';
 			foreach ($conn->query($q) as $sqlNode) {
 				//$label=$nodeType.'\\'.$sqlNode['label'];
 				$label=$nodeType.'\\'.$sqlNode['id'];
-				$this->nodes->getOrMake(false,$label)->increaseWeight(1);
+				$nodes($label)->increaseWeight(1);
 			}
 		}
 		
@@ -38,11 +40,11 @@ class Client {
 				foreach ($conn->query($q) as $sqlEdge) {
 					$label1=$fromNT.'\\'.$sqlEdge['id1'];
 					$label2=$toNT.'\\'.$sqlEdge['id2'];
-					$node1=$this->nodes->getOrMake(false,$label1);
-					$node2=$this->nodes->getOrMake(false,$label2);
+					$node1=$nodes($label1);
+					$node2=$nodes($label2);
 					$node1->increaseWeight(1);
 					$node2->increaseWeight(1);
-					$this->edges->getOrMake(false,$node1,$node2)->increaseWeight($sqlEdge['weight']);
+					$edges($node1,$node2)->increaseWeight($sqlEdge['weight']);
 				}
 			}
 		}

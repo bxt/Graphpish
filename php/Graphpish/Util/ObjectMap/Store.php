@@ -6,16 +6,16 @@ class Store {
 	/**
 	 * @var int
 	 */
-	private $keydepth;
+	private $keycnt;
 	private $data=array();
 	private $annotCache=array();
 	private $annotReader;
 	private $defaultClass;
 	const KEY_ANNOT='Graphpish\\Util\\ObjectMap\\KeyA';
 	const CONSTR_ANNOT='Graphpish\\Util\\ObjectMap\\KeyConstructorA';
-	public function __construct($keydepth,$defaultClass=false,$annotReader=false) {
-		if($keydepth<1) throw new \Exception("Invalid Keydepth: $keydepth");
-		$this->keydepth=$keydepth;
+	public function __construct($keycnt,$defaultClass=false,$annotReader=false) {
+		if($keycnt<1) throw new \Exception("Invalid Keydepth: $keycnt");
+		$this->keycnt=$keycnt;
 		$this->annotReader=$annotReader ?: new \Doctrine\Common\Annotations\AnnotationReader;
 		$this->defaultClass=$defaultClass;
 		/* 
@@ -26,7 +26,7 @@ class Store {
 		class_exists(static::CONSTR_ANNOT,true);
 	}
 	public function store($obj) {
-		$keys=$this->getKeys($obj,$this->keydepth);
+		$keys=$this->getKeys($obj,$this->keycnt);
 		$data=new ArrayDecorator($this->data);
 		$data->store_deep($keys,$obj);
 		return $this;
@@ -37,7 +37,7 @@ class Store {
 	}
 	public function get() {
 		$args=func_get_args();
-		if(count($args)>$this->keydepth) {
+		if(count($args)>$this->keycnt) {
 			throw new \Exception("requested key depth bigger than stored key depth");
 		}
 		for($i=0,$len=count($args);$i<$len;$i++) {
@@ -56,6 +56,9 @@ class Store {
 		$this->store($new);
 		return $new;
 	}
+	public function getKeyCount() {
+		return $this->keycnt;
+	}
 	private function make($class=false) {
 		$args=func_get_args();
 		array_shift($args);
@@ -66,7 +69,7 @@ class Store {
 				throw new \Exception("Need a class to build! Set defaultClass. ");
 			}
 		}
-		$info=$this->getAnnotinfo($class,$this->keydepth);
+		$info=$this->getAnnotinfo($class,$this->keycnt);
 		if($info["builder"]->isConstructor()) {
 			$newClass=new \ReflectionClass($class);
 			$new=$newClass->newInstanceArgs($args);
@@ -105,7 +108,7 @@ class Store {
 				$good=$good&&isset($info["key"][$i]);
 			}
 			if(!$good) {
-				throw new \Exception("Class $class is not suitable for mapping keydepth {$depth}. Mising annotations?");
+				throw new \Exception("Class $class is not suitable for mapping keycnt {$depth}. Mising annotations?");
 			}
 			$this->annotCache[$depth][$class]=$info;
 		}
