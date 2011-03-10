@@ -24,6 +24,6 @@ class StorePretty extends Store {
 			case ($argc==$kc): array_unshift($args,false);
 			case ($argc==$kc+1): return call_user_func_array(array($this,'getOrMake'),$args);
 		}
-		throw new \Exception("Requested key depth does not match stored key depth");
+		throw new \BadMethodCallException("Requested key depth does not match stored key depth");
 	}
 }

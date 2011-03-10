@@ -29,7 +29,7 @@ class Client {
 			$q=sprintf('SELECT %s as id, %s as label FROM %s as nodes ',
 				$nodeTypeSqlInfo["id"],$nodeTypeSqlInfo["label"],$nodeTypeSqlInfo["table"]);
 			$result=$conn->query($q);
-			if(!$result) throw new \Exception('SQL-Error on ['.$nodeType.']: '.json_encode($conn->errorInfo()));
+			if(!$result) throw new SqlException($conn,'on ['.$nodeType.']');
 			foreach ($result as $sqlNode) {
 				$label=$nodeType.'\\'.$sqlNode['label'];
 				$id=$nodeType.'\\'.$sqlNode['id'];
@@ -45,7 +45,7 @@ class Client {
 				$q=sprintf('SELECT %s as id1, %s as id2, count(*) as weight FROM %s as edges GROUP BY id1,id2',
 					$edgeTypeSqlInfo["id1"],$edgeTypeSqlInfo["id2"],$edgeTypeSqlInfo["table"]);
 				$result=$conn->query($q);
-			if(!$result) throw new \Exception('SQL-Error on ['.$fromNT.'-'.$toNT.']: '.json_encode($conn->errorInfo()));
+			if(!$result) throw new SqlException($conn,'on ['.$fromNT.'-'.$toNT.']');
 				foreach ($result as $sqlEdge) {
 					$id1=$fromNT.'\\'.$sqlEdge['id1'];
 					$id2=$toNT.'\\'.$sqlEdge['id2'];

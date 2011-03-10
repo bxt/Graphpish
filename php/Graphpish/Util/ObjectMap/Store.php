@@ -52,7 +52,7 @@ class Store {
 	 * has to be set. 
 	 */
 	public function __construct($keycnt,$defaultClass=false,$annotReader=false) {
-		if($keycnt<1) throw new \Exception("Invalid Keydepth: $keycnt");
+		if($keycnt<1) throw new \InvalidArgumentException("Invalid (<1) Keydepth: $keycnt");
 		$this->keycnt=$keycnt;
 		$this->annotReader=$annotReader ?: new \Doctrine\Common\Annotations\AnnotationReader;
 		$this->defaultClass=$defaultClass;
@@ -87,7 +87,7 @@ class Store {
 	public function get() {
 		$args=func_get_args();
 		if(count($args)>$this->keycnt) {
-			throw new \Exception("requested key depth bigger than stored key depth");
+			throw new \BadMethodCallException("requested key depth bigger than stored key depth");
 		}
 		for($i=0,$len=count($args);$i<$len;$i++) {
 			$args[$i]=$this->getSuitableKey($args[$i]);
@@ -126,7 +126,7 @@ class Store {
 			if($this->defaultClass) {
 				$class=$this->defaultClass;
 			} else {
-				throw new \Exception("Need a class to build! Set defaultClass. ");
+				throw new \BadMethodCallException("Need a class to build! Set defaultClass. ");
 			}
 		}
 		$info=$this->getAnnotinfo($class,$this->keycnt);
@@ -174,7 +174,7 @@ class Store {
 				$good=$good&&isset($info["key"][$i]);
 			}
 			if(!$good) {
-				throw new \Exception("Class $class is not suitable for mapping keycnt {$depth}. Mising annotations?");
+				throw new MissingAnnotationsException ("Class $class is not suitable for mapping keycnt {$depth}");
 			}
 			$this->annotCache[$depth][$class]=$info;
 		}

@@ -15,7 +15,7 @@ class StorePrettyTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals($key1,$a2->getFoo());
 	}
 	/**
-	 * @expectedException Exception
+	 * @expectedException BadMethodCallException
 	 */
 	public function testTooFewArgs() {
 		$om=new StorePretty(2);
@@ -23,7 +23,7 @@ class StorePrettyTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals($key1,$a2->getFoo());
 	}
 	/**
-	 * @expectedException Exception
+	 * @expectedException BadMethodCallException
 	 */
 	public function testTooManyArgs() {
 		$om=new StorePretty(1);

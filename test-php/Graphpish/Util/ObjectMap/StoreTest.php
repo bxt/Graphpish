@@ -68,14 +68,14 @@ class StoreTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals('default-bar',$a2->getBar());
 	}
 	/**
-	 * @expectedException Exception
+	 * @expectedException BadMethodCallException
 	 */
 	public function testConstructConstructorDefaultClassWithoutActuallyHavingOne() {
 		$om=new Store(1);
 		$a2=$om->getOrMake(false,100);
 	}
 	/**
-	 * @expectedException Exception
+	 * @expectedException \Graphpish\Util\ObjectMap\MissingAnnotationsException
 	 */
 	public function testStoringAnnotationlessObject() {
 		$c=new C;
@@ -83,7 +83,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase {
 		$om->store($c);
 	}
 	/**
-	 * @expectedException Exception
+	 * @expectedException InvalidArgumentException
 	 */
 	public function testConstructWithSillyParam() {
 		$om=new Store(0);
@@ -146,7 +146,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(array($a,$b),$om->dump());
 	}
 	/**
-	 * @expectedException Exception
+	 * @expectedException BadMethodCallException
 	 */
 	public function testGetException() {
 		$om=new Store(1);

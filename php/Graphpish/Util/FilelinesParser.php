@@ -15,11 +15,11 @@ abstract class FilelinesParser {
 				$this->parseLine($buffer);
 			}
 			if (!feof($handle)) {
-				throw new \Exception("Unexpected fgets() fail");
+				throw new \RuntimeException("Unexpected fgets() fail");
 			}
 			fclose($handle);
 		} else {
-			throw new \Exception("Can't open file for reading: {$file}");
+			throw new \FileNotAccessibleException("Can't open file for reading: {$file}");
 		}
 		return $this;
 	}
