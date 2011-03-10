@@ -29,7 +29,7 @@ test: clean
 	phpunit --coverage-html target/docs/test-coverage/ test-php/
 	#test-sh/testSimplpeDemo.sh
 
-dist: test cleandemos
+dist: phar test cleandemos
 	@echo
 	@echo "Packing into dist..."
 	@echo
@@ -54,5 +54,6 @@ demos: phar cleandemos
 	@echo "Running some deoms..."
 	@echo
 	(cd demos && ./simple.sh)
-	(cd demos && ./own-trace.sh)
+	#(cd demos && ./own-trace.sh)
 	(cd demos && ./tag-database.sh)
+	(cd demos && ./filetree.sh)
