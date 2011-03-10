@@ -8,5 +8,6 @@ class Weighted {
 	}
 	public function increaseWeight($by=1) {
 		$this->weight+=$by;
+		return $this;
 	}
 }

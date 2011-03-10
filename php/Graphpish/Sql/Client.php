@@ -40,10 +40,8 @@ class Client {
 				foreach ($conn->query($q) as $sqlEdge) {
 					$label1=$fromNT.'\\'.$sqlEdge['id1'];
 					$label2=$toNT.'\\'.$sqlEdge['id2'];
-					$node1=$nodes($label1);
-					$node2=$nodes($label2);
-					$node1->increaseWeight(1);
-					$node2->increaseWeight(1);
+					$node1=$nodes($label1)->increaseWeight(1);
+					$node2=$nodes($label2)->increaseWeight(1);
 					$edges($node1,$node2)->increaseWeight($sqlEdge['weight']);
 				}
 			}
