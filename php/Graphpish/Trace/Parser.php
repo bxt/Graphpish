@@ -1,15 +1,24 @@
 <?php
 namespace Graphpish\Trace;
-use Graphpish\Graph\Edge;
+use Graphpish\Util\ObjectMap\StorePretty;
 
 class Parser extends \Graphpish\Util\FilelinesParser {
 	private $_preNodes=array();
-	function parse($file) {
+	const ROOT="MAIN";
+	private $nodes;
+	private $edges;
+	public function __construct() {
+		$this->nodes=new StorePretty(1,'Graphpish\Trace\Node');
+		$this->edges=new StorePretty(2,'Graphpish\Graph\Edge');
+	}
+	public function parse($file) {
 		$this->createRootnode();
 		return parent::parse($file);
 	}
 	//private $_preLvl=0;
-	function parseLine($l) {
+	public function parseLine($l) {
+		$nodes=$this->nodes;
+		$edges=$this->edges;
 		$l=substr($l,26);
 		preg_match('/^( *)(.*)/s',$l,$startWs);
 		/* 
@@ -26,9 +35,9 @@ class Parser extends \Graphpish\Util\FilelinesParser {
 				$args=$functionCall[2];
 				$file=$functionCall[3];
 				$line=$functionCall[4];
-				$node=Node::aggregateNode($function);
+				$node=$nodes($function)->increaseWeight(1);
 				if(isset($this->_preNodes[$lvl-1])) {
-					Edge::aggregateLink($this->_preNodes[$lvl-1],$node);
+					$edges($this->_preNodes[$lvl-1],$node)->increaseWeight(1);;
 				}
 				$this->_preNodes[$lvl]=$node;
 				//$this->_preLvl=$lvl;
@@ -39,11 +48,12 @@ class Parser extends \Graphpish\Util\FilelinesParser {
 			//echo "BADWS: $l\n";
 		}
 	}
-	function createRootnode() {
-		$node=Node::aggregateNode("MAIN");
+	private function createRootnode() {
+		$nodes=$this->nodes;
+		$node=$nodes(static::ROOT)->increaseWeight(1);
 		$this->_preNodes[-1]=$node;
 	}
-	function getArrays() {
-		return array("nodes"=>Node::getAll(),"edges"=>Edge::getAll());
+	public function getArrays() {
+		return array("nodes"=>$this->nodes->dump(),"edges"=>$this->edges->dump(),"root"=>$this->nodes->get(static::ROOT));
 	}
 }
