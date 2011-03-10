@@ -8,8 +8,9 @@ abstract class Cli {
 			if(strrchr($argv[1],'.')==".xt") {
 				$p=new Trace\Parser();
 				$result=$p->parse($argv[1])->getArrays();
+				//var_dump($result);
 				$r=new Graph\Render();
-				$r->rStart()->rNodes($result["nodes"])->rEdges($result["edges"])->rEnd();
+				$r->rStart($result["root"])->rNodes($result["nodes"])->rEdges($result["edges"])->rEnd();
 				
 			} elseif (strrchr($argv[1],'.')==".gsql") {
 				$p=new Sql\Client();

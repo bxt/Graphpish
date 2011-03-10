@@ -2,10 +2,12 @@
 namespace Graphpish\Graph;
 
 class Render {
-	function rStart() {
+	function rStart($root=false) {
 		echo 'strict digraph G {'.NL.NL;
 		echo '  overlap=false'.NL;
-		echo '  root=node186495f7'.NL;
+		if($root!==false) {
+			echo '  root='.$root->getRenderId().NL;
+		}
 		echo '  splines=true'.NL;
 		echo '  epsilon=0.0000001'.NL;
 		echo '  sep=.2'.NL;
@@ -18,9 +20,9 @@ class Render {
 	function rNodes($nodes) {
 		foreach($nodes as $node) {
 			$weight=$node->getWeight();
-			echo '  '.$node->getId().' [';
+			echo '  '.$node->getRenderId().' [';
 			echo ' penwidth='.self::strokeWith($weight).', ';
-			echo ' label = '.self::labelEsc($node->getLabel().' ('.$weight.')');
+			echo ' label = '.self::labelEsc($node->getLabel());
 			echo self::attributesFromArray($node->getRenderOpts());
 			echo ' ];'.NL;
 		}
@@ -31,10 +33,10 @@ class Render {
 	function rEdges($edges) {
 		foreach($edges as $edge) {
 			$weight=$edge->getWeight();
-			echo '  '.$edge->getFrom()->getId().' -> '.$edge->getTo()->getId().' [';
+			echo '  '.$edge->getFrom()->getRenderId().' -> '.$edge->getTo()->getRenderId().' [';
 			echo ' penwidth='.self::strokeWith($weight).',';
 			echo ' weight='.(log($weight,10)*3).',';
-			echo ' label='.self::labelEsc($weight).',';
+			echo ' label='.self::labelEsc($edge->getLabel()).',';
 			echo ' color="#'.static::randomColor(true).'99"';
 			echo self::attributesFromArray($edge->getRenderOpts());
 			echo ' ];'.NL;

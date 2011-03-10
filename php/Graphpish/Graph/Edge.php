@@ -1,9 +1,10 @@
 <?php
 namespace Graphpish\Graph;
 
-class Edge extends Element {
+class Edge extends Element implements HasLabelI {
 	private $from;
 	private $to;
+	private $label=false;
 	
 	/**
 	 * @Graphpish\Util\ObjectMap\KeyConstructorA(1)
@@ -27,4 +28,14 @@ class Edge extends Element {
 		return $this->to;
 	}
 	
+	public function setLabel($label=false) {
+		$this->label=$label;
+		return $this;
+	}
+	
+	public function getLabel() {
+		if($this->label===false) return $this->getWeight();
+		return $this->label.': '.$this->getWeight();
+	}
+
 }
