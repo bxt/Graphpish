@@ -58,10 +58,7 @@ class Client {
 		
 		return $this;
 	}
-	/*
-	Node::aggregateNode($function);
-	Edge::aggregateLink($this->_preNodes[$lvl-1],$node);
-	*/
+	
 	public function getArrays() {
 		return array("nodes"=>$this->nodes->dump(),"edges"=>$this->edges->dump());
 	}
