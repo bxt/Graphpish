@@ -7,7 +7,7 @@ class Node extends \Graphpish\Graph\Node implements \Graphpish\Graph\hasLabelI {
 			self::loadFunctionColors();
 		}
 		$label=$this->getLabel();
-		if(self::$functionColors&&isset(self::$functionColors[$label])) {
+		if(isset(self::$functionColors[$label])) {
 			$this->setRenderOpt("color",self::$functionColors[$label]);
 		}
 		return parent::getRenderOpts();
