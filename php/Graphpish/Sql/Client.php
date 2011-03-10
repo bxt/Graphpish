@@ -59,8 +59,8 @@ class Client {
 		return $this;
 	}
 	
-	public function getArrays() {
-		return array("nodes"=>$this->nodes->dump(),"edges"=>$this->edges->dump());
+	public function getGraph() {
+		return new \Graphpish\Graph\Graph($this->nodes->dump(),$this->edges->dump());
 	}
 	private function connect() {
 		$opts=$this->options->getOpts();

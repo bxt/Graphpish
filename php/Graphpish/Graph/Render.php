@@ -3,7 +3,10 @@ namespace Graphpish\Graph;
 
 class Render {
 	const NL="\n";
-	function rStart($root=false) {
+	function r(Graph $graph) {
+		$this->rStart($graph->getRoot(),$graph)->rNodes($graph->getNodes())->rEdges($graph->getEdges())->rEnd();
+	}
+	function rStart($root=false,$graph=null) {
 		echo 'strict digraph G {'.self::NL.self::NL;
 		echo '  overlap=false'.self::NL;
 		if($root!==false) {
@@ -15,6 +18,12 @@ class Render {
 		echo self::NL;
 		echo '  node [fontsize=9]'.self::NL;
 		echo '  edge [fontsize=7]'.self::NL;
+		if($graph) {
+			echo '  graph [';
+			echo ' bgcolor=white';
+			echo self::attributesFromArray($graph->getRenderOpts());
+			echo ' ];'.self::NL;
+		}
 		echo self::NL.self::NL;
 		return $this;
 	}

@@ -35,8 +35,7 @@ class Traversor {
 		return $this;
 	}
 	
-	public function getArrays() {
-		$this->root->setLabel("DIR")->increaseWeight(200);
-		return array("nodes"=>$this->nodes->dump(),"edges"=>$this->edges->dump(), "root"=>$this->root);
+	public function getGraph() {
+		return new \Graphpish\Graph\Graph($this->nodes->dump(),$this->edges->dump(),$this->root);
 	}
 }

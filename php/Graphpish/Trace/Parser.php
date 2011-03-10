@@ -53,7 +53,7 @@ class Parser extends \Graphpish\Util\FilelinesParser {
 		$node=$nodes(static::ROOT)->increaseWeight(1);
 		$this->_preNodes[-1]=$node;
 	}
-	public function getArrays() {
-		return array("nodes"=>$this->nodes->dump(),"edges"=>$this->edges->dump(),"root"=>$this->nodes->get(static::ROOT));
+	public function getGraph() {
+		return new \Graphpish\Graph\Graph($this->nodes->dump(),$this->edges->dump(),$this->nodes->get(static::ROOT));
 	}
 }

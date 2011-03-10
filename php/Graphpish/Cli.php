@@ -7,28 +7,22 @@ abstract class Cli {
 			
 			if (is_dir($argv[1])) {
 				$p=new Filetree\Traversor();
-				$result=$p->traverse($argv[1])->getArrays();
-				//var_dump($result);
-				$r=new Graph\Render();
-				$r->rStart($result["root"])->rNodes($result["nodes"])->rEdges($result["edges"])->rEnd();
+				$graph=$p->traverse($argv[1])->getGraph();
 				
 			} elseif(strrchr($argv[1],'.')==".xt") {
 				$p=new Trace\Parser();
-				$result=$p->parse($argv[1])->getArrays();
-				//var_dump($result);
-				$r=new Graph\Render();
-				$r->rStart($result["root"])->rNodes($result["nodes"])->rEdges($result["edges"])->rEnd();
+				$graph=$p->parse($argv[1])->getGraph();
 				
 			} elseif (strrchr($argv[1],'.')==".gsql") {
 				$p=new Sql\Client();
-				$result=$p->addSource($argv[1])->process()->getArrays();
-				//var_dump($result);
-				$r=new Graph\Render();
-				$r->rStart()->rNodes($result["nodes"])->rEdges($result["edges"])->rEnd();
+				$graph=$p->addSource($argv[1])->process()->getGraph();
 				
 			} else {
 				die("Unrecognized file extension. ");
 			}
+			
+			$r=new Graph\Render();
+			$r->r($graph);
 			
 		} else {
 			echo 'Usage: php '.__FILE__.' trace.xt|dbconfig.gsql'."\n";
