@@ -2,7 +2,7 @@
 namespace Graphpish\Xml;
 use Graphpish\Util\ObjectMap\StorePretty;
 
-class Reader {
+class Reader implements \Graphpish\Cli\PluginI {
 	private $edges;
 	private $nodes;
 	private $root;
@@ -139,4 +139,36 @@ class Reader {
 		return str_replace("\n",'',$text);
 	}
 	
+	
+	public function cli(array $argv) {
+		if(count($argv)<1) {
+			throw new \Graphpish\Cli\ParameterException("Xml Plugin accepts at least 1 argument");
+		}
+		$files=array();
+		$useopts=true;
+		while($opt=array_shift($argv)) {
+			if($useopts&&$opt[0]=='-'&&$opt[1]=='-') {
+				$opt=substr($opt,2);
+				$val=true;
+				if($opt[0]=='n'&&$opt[1]=='o') {
+					$val=false;
+					$opt=lcfirst(substr($opt,2));
+				}
+				if(isset($this->options[$opt])) {
+					$this->options[$opt]=true;
+				} else {
+					throw new \Graphpish\Cli\ParameterException("Xml Plugin does not accept --$opt");
+				}
+			} else {
+				$useopts=false;
+				$files[]=$opt;
+			}
+		}
+		if(count($files)==0) {
+			throw new \Graphpish\Cli\ParameterException("Specify input files!");
+		}
+		foreach($files as $file) {
+			$this->read($file);
+		}
+	}
 }

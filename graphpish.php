@@ -6,7 +6,7 @@ namespace Graphpish;
 init();
 
 if(isset($argv[0])&&basename(__FILE__)==basename($argv[0])) {
-	Cli::run($argv);
+	Cli\Runner::run($argv);
 }
 
 function init(){

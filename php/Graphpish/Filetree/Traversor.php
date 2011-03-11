@@ -3,7 +3,7 @@ namespace Graphpish\Filetree;
 use Graphpish\Util\DeepIniParser;
 use Graphpish\Util\ObjectMap\StorePretty;
 
-class Traversor {
+class Traversor implements \Graphpish\Cli\PluginI {
 	private $options;
 	private $edges;
 	private $nodes;
@@ -37,5 +37,11 @@ class Traversor {
 	
 	public function getGraph() {
 		return new \Graphpish\Graph\Graph($this->nodes->dump(),$this->edges->dump(),$this->root);
+	}
+	public function cli(array $argv){
+		if(count($argv)!=1) {
+			throw new \Graphpish\Cli\ParameterException("File Plugin accepts exactly 1 argument.");
+		}
+		$this->traverse($argv[0]);
 	}
 }

@@ -57,5 +57,6 @@ demos: phar cleandemos
 	#(cd demos && ./own-trace.sh)
 	(cd demos && ./tag-database.sh)
 	(cd demos && ./makefile-dependencies.sh)
+	(cd demos && ./simple-xml.sh)
 	(cd demos && ./homepage.sh)
 	(cd demos && ./filetree.sh)

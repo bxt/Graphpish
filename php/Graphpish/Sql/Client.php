@@ -3,7 +3,7 @@ namespace Graphpish\Sql;
 use Graphpish\Util\DeepIniParser;
 use Graphpish\Util\ObjectMap\StorePretty;
 
-class Client {
+class Client implements \Graphpish\Cli\PluginI {
 	private $options;
 	private $edges;
 	private $nodes;
@@ -70,5 +70,14 @@ class Client {
 			$conn=new \PDO($opts["connection"]["dsn"]);
 		}
 		return $conn;
+	}
+	public function cli(array $argv) {
+		if(count($argv)<1) {
+			throw new \Graphpish\Cli\ParameterException("Sql Plugin accepts at least 1 argument.");
+		}
+		foreach ($argv as $qsqlFile) {
+			$this->addSource($qsqlFile);
+		}
+		$this->process();
 	}
 }
