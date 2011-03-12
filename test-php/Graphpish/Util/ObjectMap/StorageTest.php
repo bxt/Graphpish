@@ -5,12 +5,12 @@ require_once 'graphpish.php';
 
 require_once 'test-php/Graphpish/Util/ObjectMap/testclasses.php';
 
-class StoreTest extends \PHPUnit_Framework_TestCase {
+class StorageTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * @dataProvider keys
 	 */
 	public function testSimpleGet($key1,$key2) {
-		$om=new Store(1);
+		$om=new Storage(1);
 		$a=new A($key1,$key2);
 		$om->store($a);
 		$a2=$om->get($key1);
@@ -21,7 +21,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase {
 	 * @dataProvider keys
 	 */
 	public function testDualGet($key1,$key2) {
-		$om=new Store(2);
+		$om=new Storage(2);
 		$a=new A($key1,$key2);
 		$om->store($a);
 		$a2=$om->get($key1,$key2);
@@ -32,7 +32,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase {
 	 * @dataProvider keys
 	 */
 	public function testDualGetLooped($key1,$key2) {
-		$om=new Store(2);
+		$om=new Storage(2);
 		$a=new A($key1,$key2);
 		$om->store($a);
 		for($i=0;$i<100;$i++) {
@@ -45,7 +45,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase {
 	 * @dataProvider keys
 	 */
 	public function testConstructStatic($key1,$key2) {
-		$om=new Store(1);
+		$om=new Storage(1);
 		$a2=$om->getOrMake(__NAMESPACE__."\\B",$key1);
 		$this->assertEquals($key1,$a2->getFoo());
 	}
@@ -53,7 +53,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase {
 	 * @dataProvider keys
 	 */
 	public function testConstructConstructor($key1,$key2) {
-		$om=new Store(1);
+		$om=new Storage(1);
 		$a2=$om->getOrMake(__NAMESPACE__."\\A",$key1);
 		$this->assertEquals($key1,$a2->getFoo());
 		$this->assertEquals('default-bar',$a2->getBar());
@@ -62,7 +62,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase {
 	 * @dataProvider keys
 	 */
 	public function testConstructConstructorDefaultClass($key1,$key2) {
-		$om=new Store(1,__NAMESPACE__."\\A");
+		$om=new Storage(1,__NAMESPACE__."\\A");
 		$a2=$om->getOrMake(false,$key1);
 		$this->assertEquals($key1,$a2->getFoo());
 		$this->assertEquals('default-bar',$a2->getBar());
@@ -71,7 +71,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase {
 	 * @expectedException BadMethodCallException
 	 */
 	public function testConstructConstructorDefaultClassWithoutActuallyHavingOne() {
-		$om=new Store(1);
+		$om=new Storage(1);
 		$a2=$om->getOrMake(false,100);
 	}
 	/**
@@ -79,20 +79,20 @@ class StoreTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testStoringAnnotationlessObject() {
 		$c=new C;
-		$om=new Store(1);
+		$om=new Storage(1);
 		$om->store($c);
 	}
 	/**
 	 * @expectedException InvalidArgumentException
 	 */
 	public function testConstructWithSillyParam() {
-		$om=new Store(0);
+		$om=new Storage(0);
 	}
 	/**
 	 * @dataProvider keys
 	 */
 	public function testConstructConstructorDual($key1,$key2) {
-		$om=new Store(2);
+		$om=new Storage(2);
 		$a2=$om->getOrMake(__NAMESPACE__."\\A",$key1,$key2);
 		$this->assertEquals($key1,$a2->getFoo());
 		$this->assertEquals($key2,$a2->getBar());
@@ -101,7 +101,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase {
 	 * @dataProvider keys
 	 */
 	public function testMixedClasses($key1,$key2) {
-		$om=new Store(1);
+		$om=new Storage(1);
 		$a=new A($key1,2);
 		$b=new B();
 		$b->foo=$key2;
@@ -118,7 +118,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase {
 	 * @dataProvider keys
 	 */
 	public function testOverride($key1,$key2) {
-		$om=new Store(1);
+		$om=new Storage(1);
 		$b=new B();
 		$b->foo=$key1;
 		$b->other="bad";
@@ -137,7 +137,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase {
 	 * @depends testMixedClasses
 	 */
 	public function testDump($key1,$key2) {
-		$om=new Store(1);
+		$om=new Storage(1);
 		$a=new A($key1,2);
 		$b=new B();
 		$b->foo=$key2;
@@ -149,7 +149,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase {
 	 * @expectedException BadMethodCallException
 	 */
 	public function testGetException() {
-		$om=new Store(1);
+		$om=new Storage(1);
 		$a=new A(1,2);
 		$om->store($a);
 		$a2=$om->get(1,2);

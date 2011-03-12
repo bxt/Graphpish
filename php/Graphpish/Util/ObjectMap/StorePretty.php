@@ -2,9 +2,9 @@
 namespace Graphpish\Util\ObjectMap;
 
 /**
- * Provides __invoke() magic for Store
+ * Provides __invoke() magic for Storage
  */
-class StorePretty extends Store {
+class StorePretty extends Storage {
   /**
    * Easy access to dump() and getOrMake()
    * 
@@ -13,7 +13,7 @@ class StorePretty extends Store {
    *  - 0   arguments calls dump()
    *  - k   arguments calls getOrMake(), use default Class
    *  - k+1 arguments maps directly to getOrMake()
-   * k is the Store's keycnt
+   * k is the Storage's keycnt
    */
 	public function __invoke() {
 		$args=func_get_args();

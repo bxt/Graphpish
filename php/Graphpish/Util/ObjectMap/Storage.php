@@ -2,7 +2,7 @@
 namespace Graphpish\Util\ObjectMap;
 use Graphpish\Util\ArrayDecorator;
 
-class Store {
+class Storage {
 	/**
 	 * How many keys will be used
 	 * 
