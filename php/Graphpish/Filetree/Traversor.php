@@ -4,7 +4,6 @@ use Graphpish\Util\DeepIniParser;
 use Graphpish\Util\ObjectMap\StorePretty;
 
 class Traversor implements \Graphpish\Cli\PluginI {
-	private $options;
 	private $edges;
 	private $nodes;
 	private $root;
