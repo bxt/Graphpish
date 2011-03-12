@@ -20,7 +20,6 @@ class Render {
 		echo '  edge [fontsize=7]'.self::NL;
 		if($graph) {
 			echo '  graph [';
-			echo ' bgcolor=white';
 			echo self::attributesFromArray($graph->getRenderOpts());
 			echo ' ];'.self::NL;
 		}
@@ -32,7 +31,7 @@ class Render {
 			$weight=$node->getWeight();
 			echo '  '.$node->getRenderId().' [';
 			echo ' penwidth='.self::strokeWith($weight).', ';
-			echo ' label = '.self::labelEsc($node->getLabel());
+			echo ' label = '.self::labelEsc($node->getLabel()).',';
 			echo self::attributesFromArray($node->getRenderOpts());
 			echo ' ];'.self::NL;
 		}
@@ -47,7 +46,7 @@ class Render {
 			echo ' penwidth='.self::strokeWith($weight).',';
 			echo ' weight='.(log($weight,10)*3).',';
 			echo ' label='.self::labelEsc($edge->getLabel()).',';
-			echo ' color="#'.static::randomColor(true).'99"';
+			echo ' color="#'.static::randomColor(true).'99"'.',';
 			echo self::attributesFromArray($edge->getRenderOpts());
 			echo ' ];'.self::NL;
 		}
@@ -77,11 +76,10 @@ class Render {
 		return '"'.str_replace(array('"','\\'),array('\\','\\\\'),$label).'"';
 	}
 	protected static function attributesFromArray($attr_array) {
-		$attr_string='';
 		$attr_string_list=array();
 		foreach ($attr_array as $attr_name=>$attr_val) {
-			$attr_string.=', '.$attr_name.'='.self::labelEsc($attr_val);
+			$attr_string_list[]=$attr_name.'='.self::labelEsc($attr_val);
 		}
-		return $attr_string;
+		return implode(', ',$attr_string_list);
 	}
 }
