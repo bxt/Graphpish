@@ -32,9 +32,11 @@ class Parser extends \Graphpish\Util\FilelinesParser implements \Graphpish\Cli\P
 			if(isset($functionCall[0])) {
 				$lvl=strlen($startWs[1])/2;
 				$function=$functionCall[1];
+				/*
 				$args=$functionCall[2];
 				$file=$functionCall[3];
 				$line=$functionCall[4];
+				*/
 				$node=$nodes($function)->increaseWeight(1);
 				if(isset($this->_preNodes[$lvl-1])) {
 					$edges($this->_preNodes[$lvl-1],$node)->increaseWeight(1);;
