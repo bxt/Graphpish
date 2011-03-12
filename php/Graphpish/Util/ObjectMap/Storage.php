@@ -18,7 +18,7 @@ class Storage {
 	private $data=array();
 	
 	/**
-	 * Caching parsed annotation data for depth/classes here
+	 * Caching parsed annotation data for classes here
 	 */
 	private $annotCache=array();
 
@@ -129,12 +129,12 @@ class Storage {
 				throw new \BadMethodCallException("Need a class to build! Set defaultClass. ");
 			}
 		}
-		$info=$this->getAnnotinfo($class,$this->keycnt);
-		if($info["builder"]->isConstructor()) {
+		$builder=$this->getBuilder($class,$this->keycnt-1);
+		if($builder->isConstructor()) {
 			$newClass=new \ReflectionClass($class);
 			$new=$newClass->newInstanceArgs($args);
 		} else {
-			$new=$info["builder"]->invokeArgs(null,$args);
+			$new=$builder->invokeArgs(null,$args);
 		}
 		return $new;
 	}
@@ -144,50 +144,53 @@ class Storage {
 	 * This reads the annotations, checks which methods to
 	 * use as key generators and looks for constructors. 
 	 */
-	private function getAnnotinfo($class,$depth) {
-		if(!isset($this->annotCache[$depth][$class])) {
+	private function getAnnotinfo($class) {
+		if(!isset($this->annotCache[$class])) {
 			$info=array();
 			$rC=new \ReflectionClass($class);
 			$candidates=$rC->getMethods(\ReflectionMethod::IS_PUBLIC | \ReflectionMethod::IS_STATIC);
 			foreach($candidates as $candidate) {
 				$candidateAnnots=$this->annotReader->getMethodAnnotations($candidate);
 				if(isset($candidateAnnots[static::KEY_ANNOT])) {
-					$lvl=$candidateAnnots[static::KEY_ANNOT]->value;
-					if($lvl<$depth) {
-						$info["key"][$lvl]=$candidate;
-					}
+					$level=$candidateAnnots[static::KEY_ANNOT]->value;
+					$info["key"][$level]=$candidate;
 				}
 				if(isset($candidateAnnots[static::CONSTR_ANNOT])) {
-					$lvl=$candidateAnnots[static::CONSTR_ANNOT]->value;
+					$level=$candidateAnnots[static::CONSTR_ANNOT]->value;
 					if(
-							$lvl==($depth-1) &&
 							$candidate->isPublic() &&
 							($candidate->isStatic()||$candidate->isConstructor())
 							) {
-						$info["builder"]=$candidate;
+						$info["builder"][$level]=$candidate;
 					}
 				}
 			}
-			$good=true;
-			$good=$good&&isset($info["builder"]);
-			for($i=0;$i<$depth;$i++) {
-				$good=$good&&isset($info["key"][$i]);
-			}
-			if(!$good) {
-				throw new MissingAnnotationsException ("Class $class is not suitable for mapping keycnt {$depth}");
-			}
-			$this->annotCache[$depth][$class]=$info;
+			$this->annotCache[$class]=$info;
 		}
-		return $this->annotCache[$depth][$class];
+		return $this->annotCache[$class];
 	}
+	private function getBuilder($class,$level) {
+		$info=$this->getAnnotinfo($class);
+		if(!isset($info["builder"][$level])) {
+			throw new MissingAnnotationsException ("Class {$class} has no constructor for level {$level}");
+		}
+		return $info["builder"][$level];
+	}
+	private function getKeymethod($class,$level) {
+		$info=$this->getAnnotinfo($class);
+		if(!isset($info["key"][$level])) {
+			throw new MissingAnnotationsException ("Class {$class} has no key for level {$level}");
+		}
+		return $info["key"][$level];
+	}
+	
 	/**
 	 * Get the list of keys of an object
 	 */
 	private function getKeys($obj,$depth) {
-		$info=$this->getAnnotinfo(get_class($obj),$depth);
 		$keys=array();
 		for($i=0;$i<$depth;$i++) {
-			$keys[]=$this->getSuitableKey($info["key"][$i]->invokeArgs($obj,array()));
+			$keys[]=$this->getSuitableKey($this->getKeymethod(get_class($obj),$i)->invokeArgs($obj,array()));
 		}
 		return $keys;
 	}

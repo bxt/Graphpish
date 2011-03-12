@@ -83,6 +83,13 @@ class StorageTest extends \PHPUnit_Framework_TestCase {
 		$om->store($c);
 	}
 	/**
+	 * @expectedException \Graphpish\Util\ObjectMap\MissingAnnotationsException
+	 */
+	public function testBuildingAnnotationlessObject() {
+		$om=new Storage(1);
+		$om->getOrMake('Graphpish\\Util\\ObjectMap\\C',0);
+	}
+	/**
 	 * @expectedException InvalidArgumentException
 	 */
 	public function testConstructWithSillyParam() {
