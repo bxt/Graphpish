@@ -13,6 +13,7 @@ clean:
 	@echo "----------------------------------------"
 	rm -Rvf target
 	rm -vf ${BUILD_NAME}.phar
+	@echo "----------------------------------------"
 	mkdir -vp target/{dist,docs/{phpuml,phpdoc}}
 
 phar: clean
@@ -22,6 +23,7 @@ phar: clean
 	@echo
 	@echo "----------------------------------------"
 	find php -type f -iname "*.php" | xargs -n 1 ${PHP_PATH}/php -l
+	@echo "----------------------------------------"
 	find lib -type f -iname "*.php" | xargs ${PHP_PATH}/php -d phar.readonly=0 ${PHP_PATH}/phar pack -f "${BUILD_NAME}.phar"
 	find php -type f -iname "*.php" | xargs ${PHP_PATH}/php -d phar.readonly=0 ${PHP_PATH}/phar pack -f "${BUILD_NAME}.phar" -s "${BUILD_NAME}.php" 
 	chmod a+x "${BUILD_NAME}.phar"
@@ -31,6 +33,10 @@ test: clean
 	@echo
 	@echo "Running tests..."
 	@echo
+	@echo "----------------------------------------"
+	phpmd php text design
+	@echo "----------------------------------------"
+	- phpmd php text codesize
 	@echo "----------------------------------------"
 	phpunit --coverage-html target/docs/test-coverage/ test-php/
 	#test-sh/testSimplpeDemo.sh
