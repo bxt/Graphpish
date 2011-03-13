@@ -56,6 +56,7 @@ docs: clean
 	@echo
 	@echo "----------------------------------------"
 	phpuml -f html -o target/docs/phpuml --no-deployment-view -n "${BUILD_NAME}-${BUILD_VERSION}" php
+	(echo "STATS FOR ${BUILD_NAME}-${BUILD_VERSION}" && echo "------" && phploc php) > target/docs/phploc.txt
 	#phpdoc --defaultpackagename "${BUILD_NAME}" --defaultcategoryname "${BUILD_NAME}-${BUILD_VERSION}" -ric README.md -d php -t target/docs/phpdoc
 
 cleandemos:
