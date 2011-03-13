@@ -5,6 +5,10 @@ namespace Graphpish\Util;
  * Call HTTP requests over network
  */
 class HttpClient {
+	/**
+ 	 * Fetch web page, follow HEAd redirects
+	 * @recursive
+ 	 */
 	static function fetch($url,$recursion=0) {
 		if($recursion>10) throw new HttpClientException("Server is redericting way to often, gave up");
 		
@@ -34,7 +38,10 @@ class HttpClient {
 		throw new HttpClientException ("Download failed: ".strstr($headers,"\r\n",true));
 		
 	}
-	// http://www.php.net/manual/de/function.fsockopen.php#96146
+	/**
+ 	 * Remove relicts from chunked transfer
+	 * @see http://www.php.net/manual/de/function.fsockopen.php#96146
+ 	 */
 	private static function unchunkHttp11($data) {
 		$fp = 0;
 		$outData = "";
@@ -48,6 +55,9 @@ class HttpClient {
 		}
 		return $outData;
 	}
+	/**
+ 	 * Extract relevant info from url
+ 	 */
 	private static function getUrlParts($url) {
 		$host=parse_url($url,PHP_URL_HOST);
 		$path=parse_url($url,PHP_URL_PATH);
@@ -58,6 +68,9 @@ class HttpClient {
 		$ip = gethostbyname($host);
 		return array($ip,$host,$path);
 	}
+	/**
+ 	 * Send request to ip and fetch all the response
+ 	 */
 	private static function simpleRemoteCall($ip,$in) {
 		$socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
 		if ($socket === false) {
@@ -76,6 +89,9 @@ class HttpClient {
 		// socket_close($socket);
 		return $out;
 	}
+	/**
+ 	 * Compose a basic GET request
+ 	 */
 	private static function buildHttpRequestHeaders($host,$path) {
 		$headers = "GET $path HTTP/1.1\r\n";
 		$headers .= "Host: $host\r\n";
