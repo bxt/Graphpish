@@ -6,6 +6,7 @@ Graphpish features several:
 - Parse directory trees into graphs
 - Parse xml files into graphs
 - Graphs from mysql or sqlite3 databases
+- Download and graph HTML websites
 - Parse XDebug's .xt trace files into graphs
 - PHP classes handling graphs and easy .dot-File creation
 - And maybe some day even more...
