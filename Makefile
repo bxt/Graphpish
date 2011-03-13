@@ -79,4 +79,5 @@ demos: phar cleandemos
 	(cd demos && ./makefile-dependencies.sh)
 	(cd demos && ./simple-xml.sh)
 	(cd demos && ./homepage.sh)
+	#(cd demos && ./html5graph.sh)
 	(cd demos && ./filetree.sh)
