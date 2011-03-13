@@ -139,7 +139,7 @@ class Storage {
 		return $new;
 	}
 	/**
-	 * Gather all the attached information about a class
+	 * Gather all the (relevant) attached information about a class
 	 * 
 	 * This reads the annotations, checks which methods to
 	 * use as key generators and looks for constructors. 
@@ -169,6 +169,9 @@ class Storage {
 		}
 		return $this->annotCache[$class];
 	}
+	/**
+	 * Get the builder function
+	 */
 	private function getBuilder($class,$level) {
 		$info=$this->getAnnotinfo($class);
 		if(!isset($info["builder"][$level])) {
@@ -176,6 +179,9 @@ class Storage {
 		}
 		return $info["builder"][$level];
 	}
+	/**
+	 * Get the key generator method
+	 */
 	private function getKeymethod($class,$level) {
 		$info=$this->getAnnotinfo($class);
 		if(!isset($info["key"][$level])) {
