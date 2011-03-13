@@ -28,8 +28,8 @@ class HttpClient {
 		}
 		$in = "GET $path HTTP/1.1\r\n";
 		$in .= "Host: $host\r\n";
+		$in .= "User-Agent: graphpishHttpClient/0.9 (+https://github.com/bxt/Graphpish)\r\n";
 		$in .= "Connection: Close\r\n\r\n";
-		$in .= "User-Agent: graphpishHttpClient/0.9 (+https://github.com/bxt/Graphpish)\r\n\r\n";
 		$out = '';
 		socket_write($socket, $in, strlen($in));
 		
