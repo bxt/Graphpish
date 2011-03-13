@@ -6,6 +6,14 @@ namespace Graphpish\Util;
  */
 class HttpClient {
 	/**
+ 	 * User Agend sent in headers
+ 	 */
+ 	const UA="graphpishHttpClient/0.9 (+https://github.com/bxt/Graphpish)";
+	/**
+ 	 * New line sequence for HTTP protocol
+ 	 */
+	const NL="\r\n";
+	/**
  	 * Fetch web page, follow HEAd redirects
 	 * @recursive
  	 */
@@ -18,24 +26,24 @@ class HttpClient {
 		
 		// Parse answer:
 		
-		$hb=explode("\r\n\r\n",$out,2);
+		$hb=explode(self::NL.self::NL,$out,2);
 		$headers=$hb[0];
 		$body=isset($hb[1])?$hb[1]:'';
 		
-		if(preg_match("/^HTTP\/1\.[01] 2/",$headers,$m)) { // 2xx satus code?
-			if(preg_match("/transfer-encoding: chunked\r\n/i",$headers,$m)) {
+		if(preg_match('/^HTTP\/1\.[01] 2/',$headers,$m)) { // 2xx satus code?
+			if(preg_match('/transfer-encoding: chunked'.self::NL.'/i',$headers,$m)) {
 				$body=self::unchunkHttp11($body);
 			}
 			return $body;
 		}
 		
 		// if not see if there are at least location suggestions
-		if(preg_match("/Location: (.*)\r\n/",$headers,$m)) {
+		if(preg_match('/Location: (.*)'.self::NL.'/',$headers,$m)) {
 			return static::fetch($m[1],++$recursion);
 		}
 		
 		// we didn't get anything valuable form the server
-		throw new HttpClientException ("Download failed: ".strstr($headers,"\r\n",true));
+		throw new HttpClientException ("Download failed: ".strstr($headers,self::NL,true));
 		
 	}
 	/**
@@ -46,7 +54,7 @@ class HttpClient {
 		$fp = 0;
 		$outData = "";
 		while ($fp < strlen($data)) {
-			$rawnum = substr($data, $fp, strpos(substr($data, $fp), "\r\n") + 2);
+			$rawnum = substr($data, $fp, strpos(substr($data, $fp), self::NL) + 2);
 			$num = hexdec(trim($rawnum));
 			$fp += strlen($rawnum);
 			$chunk = substr($data, $fp, $num);
@@ -93,10 +101,10 @@ class HttpClient {
  	 * Compose a basic GET request
  	 */
 	private static function buildHttpRequestHeaders($host,$path) {
-		$headers = "GET $path HTTP/1.1\r\n";
-		$headers .= "Host: $host\r\n";
-		$headers .= "User-Agent: graphpishHttpClient/0.9 (+https://github.com/bxt/Graphpish)\r\n";
-		$headers .= "Connection: Close\r\n\r\n";
+		$headers = "GET $path HTTP/1.1".self::NL;
+		$headers .= "Host: $host".self::NL;
+		$headers .= 'User-Agent: '.self::UA.self::NL;
+		$headers .= 'Connection: Close'.self::NL.self::NL;
 		return $headers;
 	}
 }
