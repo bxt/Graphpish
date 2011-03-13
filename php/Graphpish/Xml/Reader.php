@@ -28,7 +28,11 @@ class Reader implements \Graphpish\Cli\PluginI {
 	}
 	
 	public function read($xmlfile) {
-		$xmldoc=simplexml_load_file($xmlfile);
+		if($xmlfile instanceof \SimpleXMLElement) {
+			$xmldoc=$xmlfile;
+		} else {
+			$xmldoc=simplexml_load_file($xmlfile);
+		}
 		$this->read_inner($xmldoc);
 		return $this;
 	}
