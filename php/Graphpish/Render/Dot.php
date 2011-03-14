@@ -1,9 +1,12 @@
 <?php
-namespace Graphpish\Graph;
+namespace Graphpish\Render;
 
-class Render {
+class Dot implements \Graphpish\Cli\RendererI {
 	const NL="\n";
-	function r(Graph $graph) {
+	function __construct() {
+		
+	}
+	function render(\Graphpish\Graph\Graph $graph) {
 		$this->rStart($graph->getRoot(),$graph)->rNodes($graph->getNodes())->rEdges($graph->getEdges())->rEnd();
 	}
 	function rStart($root=false,$graph=null) {
@@ -55,9 +58,9 @@ class Render {
 	}
 	
 	function rEnd() {
-	echo '}';
-	echo self::NL.self::NL;
-	return $this;
+		echo '}';
+		echo self::NL.self::NL;
+		return $this;
 	}
 	protected static function strokeWith($weight) {
 		return max(log($weight,10)+($weight/10000)+0.5,1);
