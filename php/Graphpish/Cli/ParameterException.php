@@ -1,4 +1,4 @@
 <?php
 namespace Graphpish\Cli;
 
-class ParameterException {}
+class ParameterException extends \Exception {}
