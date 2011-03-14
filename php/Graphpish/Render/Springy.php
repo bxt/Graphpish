@@ -6,6 +6,7 @@ class Springy implements \Graphpish\Cli\RendererI {
 	const JQ_URL="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js";
 	const SPRINGY_URL="https://github.com/tub/springy/raw/master/springy.js";
 	const SPRINGYUI_URL="https://github.com/tub/springy/raw/master/springyui.js";
+	const FULLSCRCANV_URL="https://gist.github.com/raw/869963/9101419fe1d7d030207992435735f70828f425a4/jquery.fullscreenCanvas.js";
 	function __construct() {
 		
 	}
@@ -18,6 +19,7 @@ class Springy implements \Graphpish\Cli\RendererI {
 		echo '  <script src="'.self::JQ_URL.'"></script>'.self::NL;
 		echo '  <script src="'.self::SPRINGY_URL.'"></script>'.self::NL;
 		echo '  <script src="'.self::SPRINGYUI_URL.'"></script>'.self::NL;
+		echo '  <script src="'.self::FULLSCRCANV_URL.'"></script>'.self::NL;
 		echo '  <script>'.self::NL;
 		echo '    var graph = new Graph();'.self::NL;
 		echo self::NL.self::NL;
@@ -42,9 +44,10 @@ class Springy implements \Graphpish\Cli\RendererI {
 	function rEnd() {
 		echo '    jQuery(document).ready(function(){'.self::NL;
 		echo '        jQuery(\'#springyspace\').springy({ \'graph\': graph });'.self::NL;
+		echo '        jQuery(\'#springyspace\').fullscreenCanvas();'.self::NL;
 		echo '    });'.self::NL;
 		echo '  </script>'.self::NL;
-		echo '  <canvas id="springyspace" width="640" height="480" />'.self::NL;
+		echo '  <canvas id="springyspace" width="1000" height="700" />'.self::NL;
 		echo '</body>'.self::NL;
 		echo '</html>'.self::NL;
 		echo self::NL.self::NL;
