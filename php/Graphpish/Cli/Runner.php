@@ -4,9 +4,24 @@ namespace Graphpish\Cli;
 abstract class Runner {
 	public static function run($argv=array()){
 		$scriptname=array_shift($argv);
-		switch(count($argv)) {
-		case 0:throw new ParameterException("No arguments specified!");
-		case 1:
+		$renderer='Graphpish\\Render\\Dot';
+		
+		if(count($argv)==0) throw new ParameterException("No arguments specified!");
+		while (count($argv)>1) {
+			if( ($argv[0]=="--plugin"||$argv[0]=="-p") && isset($argv[1]) ) {
+				$plugin=$argv[1];
+				array_shift($argv);
+				array_shift($argv);
+			} elseif( ($argv[0]=="--renderer"||$argv[0]=="-r") && isset($argv[1]) ) {
+				$renderer=$argv[1];
+				array_shift($argv);
+				array_shift($argv);
+			} else {
+				break;
+			}
+		}
+		
+		if(!isset($plugin)&&isset($argv[0])) {
 			if (is_dir($argv[0]))
 				$plugin='Graphpish\\Filetree\\Traversor';
 			elseif(strrchr($argv[0],'.')==".xml")
@@ -17,28 +32,25 @@ abstract class Runner {
 				$plugin='Graphpish\\Sql\\Client';
 			else
 				throw new ParameterException("Unrecognized file extension");
-			break;
-		default:
-			if( ($argv[0]=="--plugin"||$argv[0]=="-p") && isset($argv[1])) {
-				$plugin=$argv[1];
-				array_shift($argv);
-				array_shift($argv);
-			}
-			break;
 		}
-		if(isset($plugin)) {
-			$pluginRC=new \ReflectionClass($plugin);
-			if(!$pluginRC->implementsInterface("Graphpish\Cli\PluginI")) {
-				throw new ParameterException("Tried to load invalid plugin");
-			}
-			$pluginIns=$pluginRC->newInstance();
-			$pluginIns->cli($argv);
-			$graph=$pluginIns->getGraph();
-			$r=new \Graphpish\Graph\Render();
-			$r->r($graph);
-		} else {
+		if(!isset($plugin)) {
 			throw new ParameterException("No plugin loaded");
 		}
+		
+		$pluginRC=new \ReflectionClass($plugin);
+		if(!$pluginRC->implementsInterface("Graphpish\Cli\PluginI")) {
+			throw new ParameterException("Tried to load invalid plugin");
+		}
+		$renderRC=new \ReflectionClass($renderer);
+		if(!$renderRC->implementsInterface("Graphpish\Cli\RendererI")) {
+			throw new ParameterException("Tried to load invalid renderer");
+		}
+		
+		$pluginIns=$pluginRC->newInstance();
+		$pluginIns->cli($argv);
+		$graph=$pluginIns->getGraph();
+		$r=$renderRC->newInstance();
+		$r->render($graph);
 	}
 }
 
