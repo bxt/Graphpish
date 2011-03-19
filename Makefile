@@ -1,5 +1,5 @@
 BUILD_NAME=graphpish
-BUILD_VERSION=1.0
+BUILD_VERSION=$$(sed -n -e "4s/Version //p" README.md)
 BUILD_FILELIST=demos README.md
 PHP_PATH=/usr/bin
 

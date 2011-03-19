@@ -1,6 +1,8 @@
 Graphpish - Render Graphs with PHP & Graphviz
 =============================================
 
+Version 1.0
+
 Graphpish features several:
 
 - Parse directory trees into graphs
@@ -8,6 +10,7 @@ Graphpish features several:
 - Graphs from mysql or sqlite3 databases
 - Download and graph HTML websites
 - Parse XDebug's .xt trace files into graphs
+- Output .dot for Graphviz or JS-Code for springy
 - PHP classes handling graphs and easy .dot-File creation
 - And maybe some day even more...
 
