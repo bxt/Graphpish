@@ -6,6 +6,10 @@ require_once 'graphpish.php';
 require_once 'test-php/Graphpish/Util/ObjectMap/testclasses.php';
 
 class StorePrettyTest extends \PHPUnit_Framework_TestCase {
+	public function testCallable() {
+		$om=new StorePretty(1);
+		$this->assertEquals(true,is_callable($om));
+	}
 	/**
 	 * @dataProvider keys
 	 */
