@@ -3,7 +3,7 @@ BUILD_VERSION=$$(sed -n -e "4s/Version //p" README.md)
 BUILD_FILELIST=demos README.md
 PHP_PATH=/usr/bin
 
-all: docs dist demos
+default: docs dist demos
 
 clean:
 	@echo "----------------------------------------"
