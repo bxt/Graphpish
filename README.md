@@ -1,7 +1,7 @@
 Graphpish - Render Graphs with PHP & Graphviz
 =============================================
 
-Version 1.1-DEV
+Version 1.1
 
 Graphpish features several:
 
