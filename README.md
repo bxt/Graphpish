@@ -29,6 +29,6 @@ This will show off all features and create graphs in `demos/out/`
 
 If you just want start graphing stuff, you can use the CLI:
 
-	php graphpish.phar demos/data/simple.xml | dot -Tpng > /demos/out/simple.xml_dot.png
+	php graphpish.phar demos/data/simple.xml | dot -Tpng > demos/out/simple.xml_dot.png
 
 This will render a simple xml file into a graph. 
